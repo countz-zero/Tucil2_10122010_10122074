@@ -53,13 +53,13 @@ public class Quadtree {
         long durasi = selesai - mulai;
 
         DataBuffer dataBuff1 = img.getData().getDataBuffer();
-        DataBuffer dataBuff2 = img.getData().getDataBuffer();
+       // DataBuffer dataBuff2 = img.getData().getDataBuffer();
 
         long sizeByte_in = ((long) dataBuff1.getSize()) * 4l;
-        long sizeByte_out = ((long) dataBuff2.getSize()) * 4l;
+        //long sizeByte_out = ((long) dataBuff2.getSize()) * 4l;
 
         System.out.println("Ukuran gambar input : " + writeSize(sizeByte_in));
-        System.out.println("Ukuran gambar output : " + writeSize(sizeByte_out));
+        //System.out.println("Ukuran gambar output : " + writeSize(sizeByte_out)); Salah keknya
         System.out.println("Waktu eksekusi: " + durasi + " ms");
     }
 
