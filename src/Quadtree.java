@@ -1,4 +1,3 @@
-package src;
 import javax.imageio.ImageIO; //IO Gambar
 import java.awt.image.BufferedImage; //Manipulasi Gambar & Tipe Data BufferedImage
 import java.io.File; //Manipulasi File
@@ -6,7 +5,7 @@ import java.io.IOException; //Representasi File
 import java.awt.Color; //Tipe data warna
 import java.awt.Graphics2D; //Rendering Gambar
 import java.util.Scanner; //Input CLI
-import java.util.Locale; // Gtw???
+import java.util.Locale;
 
 
 public class Quadtree {
@@ -62,7 +61,9 @@ public class Quadtree {
         System.out.print("Alamat absolut input: ");
         absolute_address_in = scanner.nextLine().trim();
 
-        System.out.print("Metode perhitungan: ");
+        System.out.print("Metode perhitungan \nPilihan : ");
+        System.out.println("Variance (var) | Mean Absolute Deviation (mad) | Max Pixel Difference (mpd) | Entropy (ent)");
+        System.out.print(": ");
         error_method = scanner.nextLine().trim();
 
         System.out.print("Alamat absolut output: ");
@@ -85,7 +86,7 @@ public class Quadtree {
     }
 
     public static double error(int x, int y, int[] size) {
-        if ("variance".equals(error_method)) {
+        if ("var".equals(error_method)) {
             //System.out.println(123);
             double var_red = 0;
             double var_green = 0;
@@ -114,7 +115,7 @@ public class Quadtree {
             double variance = (var_red + var_green + var_blue) / 3;
 
             return variance;
-        } else if ("mean_absolute_deviation".equals(error_method)) {
+        } else if ("mad".equals(error_method)) {
             double mad_red = 0;
             double mad_green = 0;
             double mad_blue = 0;
