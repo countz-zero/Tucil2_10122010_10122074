@@ -54,7 +54,7 @@ public class Quadtree {
         System.out.println("Waktu eksekusi: " + durasi + " ms");
     }
 
-    public static void init() {
+    public static void init() { //Initialisasi input
         Scanner scanner = new Scanner(System.in);
         scanner.useLocale(Locale.US);
 
@@ -85,7 +85,7 @@ public class Quadtree {
         }
     }
 
-    public static double error(int x, int y, int[] size) {
+    public static double error(int x, int y, int[] size) { //Perhitungan error
         if ("var".equals(error_method)) {
             //System.out.println(123);
             double var_red = 0;
@@ -140,6 +140,53 @@ public class Quadtree {
             double mad = (mad_red + mad_green + mad_blue) / 3;
 
             return mad;
+        } else if ("mpd".equals(error_method)) {
+            double mpd_red_max = new Color(img.getRGB(y, x)).getRed();;
+            double mpd_green_max = new Color(img.getRGB(y, x)).getGreen();
+            double mpd_blue_max = new Color(img.getRGB(y, x)).getBlue();
+
+            double mpd_red_min = mpd_red_max;
+            double mpd_green_min = mpd_green_max;
+            double mpd_blue_min = mpd_blue_max;
+
+            for (int i = x; i < x + size[0]; i++) {
+                for (int j = y; j < y + size[1]; j++) {
+                    int val_red = new Color(img.getRGB(j, i)).getRed();
+                    int val_green = new Color(img.getRGB(j, i)).getGreen();
+                    int val_blue = new Color(img.getRGB(j, i)).getBlue();
+                    //Max
+                    if (mpd_red_max < val_red) {
+                        mpd_red_max = val_red;
+                    }
+                    if (mpd_green_max < val_green) {
+                        mpd_green_max = val_green;
+                    }
+                    if (mpd_blue_max < val_blue) {
+                        mpd_blue_max = val_blue;
+                    }
+
+                    //Min
+                    if (mpd_red_min > val_red) {
+                        mpd_red_min = val_red;
+                    }
+                    if (mpd_green_min > val_green) {
+                        mpd_green_min = val_green;
+                    }
+                    if (mpd_blue_min > val_blue) {
+                        mpd_blue_min = val_blue;
+                    }
+                }
+            }
+
+            double mpd_red = mpd_red_max - mpd_red_min;
+            double mpd_green = mpd_green_max - mpd_green_min;
+            double mpd_blue = mpd_blue_max - mpd_blue_min;
+
+            double mpd = (mpd_red + mpd_green + mpd_blue) / 3;
+
+            return mpd;
+        } else if ("ent".equals(error_method)) {
+            return 0; //Template
         } else {
             System.out.println("Metode tidak ditemukan");
             System.exit(-1);
@@ -147,10 +194,10 @@ public class Quadtree {
         }
     }
 
-    public static QuadtreeNode block_division(int x, int y, int[] size) {
+    public static QuadtreeNode block_division(int x, int y, int[] size) { //Algoritma membagi gambar menjadi 4 & membuat tree
         double variance = error(x, y, size);
         //System.out.println(variance);
-        int area = size[0] * size[1]; 
+        int area = size[0] * size[1];
         //System.out.println(size[1]);
 
         if (variance > threshold && area > min_size && area / 4 >= min_size) {
@@ -194,7 +241,7 @@ public class Quadtree {
         }
     }
 
-    public static void save_and_out() {
+    public static void save_and_out() { //Meyimpan hasil gambar
         try {
             File output = new File(absolute_address_out);
             ImageIO.write(img_out, "jpg", output);
@@ -204,7 +251,7 @@ public class Quadtree {
         }
     }
 
-    public static Color get_average_color(int x, int y, int[] size) {
+    public static Color get_average_color(int x, int y, int[] size) { //Menghitung rata-rata warna
         long sum_red = 0;
         long sum_green = 0;
         long sum_blue = 0;
