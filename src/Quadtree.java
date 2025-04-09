@@ -1,22 +1,24 @@
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.util.Scanner;
-import java.util.Locale; 
+import javax.imageio.ImageIO; //IO Gambar
+import java.awt.image.BufferedImage; //Manipulasi Gambar & Tipe Data BufferedImage
+import java.io.File; //Manipulasi File
+import java.io.IOException; //Representasi File
+import java.awt.Color; //Tipe data warna
+import java.awt.Graphics2D; //Rendering Gambar
+import java.util.Scanner; //Input CLI
+import java.util.Locale; // Gtw???
 
 
 public class Quadtree {
+    //Variabel Input
     static String absolute_address_in = "";
     static String error_method = "";
     static double threshold = 0;
     static int min_size = 0;
-    //int target;
     static String absolute_address_out = "";
     static BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
     static BufferedImage img_out = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+    static int target = 0;
+    //static String absolute_address_gif_out = "";
 
     static class QuadtreeNode {
         int x = 0, y = 0;
@@ -33,6 +35,7 @@ public class Quadtree {
             this.isLeaf = isLeaf;
         }
     }
+    
     static int[] _size = {0, 0};
     static Color _color = new Color(0, 0, 0);
     static QuadtreeNode tree = new QuadtreeNode(0, 0, _size, _color, false);
