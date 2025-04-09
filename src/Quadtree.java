@@ -1,12 +1,12 @@
 import javax.imageio.ImageIO; //IO Gambar
 import java.awt.image.BufferedImage; //Manipulasi Gambar & Tipe Data BufferedImage
+import java.awt.image.DataBuffer;
 import java.io.File; //Manipulasi File
 import java.io.IOException; //Representasi File
 import java.awt.Color; //Tipe data warna
 import java.awt.Graphics2D; //Rendering Gambar
 import java.util.Scanner; //Input CLI
 import java.util.Locale;
-import java.util.Arrays;
 
 
 public class Quadtree {
@@ -52,6 +52,14 @@ public class Quadtree {
         long selesai = System.currentTimeMillis();
         long durasi = selesai - mulai;
 
+        DataBuffer dataBuff1 = img.getData().getDataBuffer();
+        DataBuffer dataBuff2 = img.getData().getDataBuffer();
+
+        long sizeByte_in = ((long) dataBuff1.getSize()) * 4l;
+        long sizeByte_out = ((long) dataBuff2.getSize()) * 4l;
+
+        System.out.println("Ukuran gambar input : " + writeSize(sizeByte_in));
+        System.out.println("Ukuran gambar output : " + writeSize(sizeByte_out));
         System.out.println("Waktu eksekusi: " + durasi + " ms");
     }
 
@@ -324,4 +332,16 @@ public class Quadtree {
         return avgColor;
     }
 
+    public static String writeSize(long size) {
+        double size_d = size;
+        if (size_d < 1024*1024) {
+            size_d = size_d / 1024;
+            String out = String.format("%.2f", size_d) + " KB";
+            return out;
+        } else {
+            size_d = size_d/(1024*1024);
+            String out = String.format("%.2f", size_d) + " MB";
+            return out;
+        }
+    }
 }
