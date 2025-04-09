@@ -1,3 +1,4 @@
+package src;
 import javax.imageio.ImageIO; //IO Gambar
 import java.awt.image.BufferedImage; //Manipulasi Gambar & Tipe Data BufferedImage
 import java.io.File; //Manipulasi File
