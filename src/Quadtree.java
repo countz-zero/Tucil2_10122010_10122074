@@ -1,22 +1,24 @@
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.util.Scanner;
-import java.util.Locale; 
+import javax.imageio.ImageIO; //IO Gambar
+import java.awt.image.BufferedImage; //Manipulasi Gambar & Tipe Data BufferedImage
+import java.io.File; //Manipulasi File
+import java.io.IOException; //Representasi File
+import java.awt.Color; //Tipe data warna
+import java.awt.Graphics2D; //Rendering Gambar
+import java.util.Scanner; //Input CLI
+import java.util.Locale; // Gtw???
 
 
 public class Quadtree {
+    //Variabel Input
     static String absolute_address_in = "";
     static String error_method = "";
     static double threshold = 0;
     static int min_size = 0;
-    //int target;
     static String absolute_address_out = "";
     static BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
     static BufferedImage img_out = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+    static int target = 0;
+    //static String absolute_address_gif_out = "";
 
     static class QuadtreeNode {
         int x = 0, y = 0;
@@ -33,6 +35,7 @@ public class Quadtree {
             this.isLeaf = isLeaf;
         }
     }
+    
     static int[] _size = {0, 0};
     static Color _color = new Color(0, 0, 0);
     static QuadtreeNode tree = new QuadtreeNode(0, 0, _size, _color, false);
@@ -110,6 +113,7 @@ public class Quadtree {
             double variance = (var_red + var_green + var_blue) / 3;
 
             return variance;
+
         } else if ("mean_absolute_deviation".equals(error_method)) {
             double mad_red = 0;
             double mad_green = 0;
@@ -135,6 +139,7 @@ public class Quadtree {
             double mad = (mad_red + mad_green + mad_blue) / 3;
 
             return mad;
+
         } else {
             System.out.println("Metode tidak ditemukan");
             System.exit(-1);
@@ -180,6 +185,7 @@ public class Quadtree {
             node.children[3] = block_division(x + new_size_1[0], y + new_size_1[1], new_size_4);
 
             return node;
+
         } else {
             Graphics2D g = img_out.createGraphics();
             g.setColor(get_average_color(x, y, size));
@@ -194,6 +200,7 @@ public class Quadtree {
             File output = new File(absolute_address_out);
             ImageIO.write(img_out, "jpg", output);
             System.out.println("Gambar berhasil dibuat!");
+
         } catch (IOException e) {
             System.out.println("Gagal menyimpan gambar: " + e.getMessage());
         }
