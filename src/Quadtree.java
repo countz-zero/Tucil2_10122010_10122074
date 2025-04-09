@@ -6,6 +6,7 @@ import java.awt.Color; //Tipe data warna
 import java.awt.Graphics2D; //Rendering Gambar
 import java.util.Scanner; //Input CLI
 import java.util.Locale;
+import java.util.Arrays;
 
 
 public class Quadtree {
@@ -186,7 +187,51 @@ public class Quadtree {
 
             return mpd;
         } else if ("ent".equals(error_method)) {
-            return 0; //Template
+            int[] red_dist = new int[256];
+            int[] green_dist = new int[256];
+            int[] blue_dist = new int[256];
+
+            double red_ent = 0;
+            double green_ent = 0;
+            double blue_ent = 0;
+
+            for (int i = x; i < x + size[0]; i++) {
+                for (int j = y; j < y + size[1]; j++) {
+                    int val_red = new Color(img.getRGB(j, i)).getRed();
+                    int val_green = new Color(img.getRGB(j, i)).getGreen();
+                    int val_blue = new Color(img.getRGB(j, i)).getBlue();
+
+                    red_dist[val_red] += 1;
+                    green_dist[val_green] += 1;
+                    blue_dist[val_blue] += 1;
+                }
+            }
+
+            int area = size[0]*size[1];
+
+            for(int i = 0; i <= 255; i++) {
+                double prob_red = (double) red_dist[i]/area;
+                double prob_green = (double) green_dist[i]/area;
+                double prob_blue = (double) blue_dist[i]/area;
+                
+                if(prob_red > 0) {
+                    red_ent += -prob_red*Math.log(prob_red)/Math.log(2);
+                }
+
+                if(prob_green > 0) {
+                    green_ent += -prob_green*Math.log(prob_green)/Math.log(2);
+                }
+
+                if(prob_blue > 0) {
+                    blue_ent += -prob_blue*Math.log(prob_blue)/Math.log(2);
+                }
+
+                if(i == 0) {
+                }
+            }
+
+            double ent = (red_ent + green_ent + blue_ent)/3;
+            return ent;
         } else {
             System.out.println("Metode tidak ditemukan");
             System.exit(-1);
