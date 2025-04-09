@@ -114,7 +114,6 @@ public class Quadtree {
             double variance = (var_red + var_green + var_blue) / 3;
 
             return variance;
-
         } else if ("mean_absolute_deviation".equals(error_method)) {
             double mad_red = 0;
             double mad_green = 0;
@@ -140,7 +139,6 @@ public class Quadtree {
             double mad = (mad_red + mad_green + mad_blue) / 3;
 
             return mad;
-
         } else {
             System.out.println("Metode tidak ditemukan");
             System.exit(-1);
@@ -186,7 +184,6 @@ public class Quadtree {
             node.children[3] = block_division(x + new_size_1[0], y + new_size_1[1], new_size_4);
 
             return node;
-
         } else {
             Graphics2D g = img_out.createGraphics();
             g.setColor(get_average_color(x, y, size));
@@ -201,7 +198,6 @@ public class Quadtree {
             File output = new File(absolute_address_out);
             ImageIO.write(img_out, "jpg", output);
             System.out.println("Gambar berhasil dibuat!");
-
         } catch (IOException e) {
             System.out.println("Gagal menyimpan gambar: " + e.getMessage());
         }
