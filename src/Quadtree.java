@@ -34,6 +34,36 @@ public class Quadtree {
             this.avgColor = avgColor;
             this.isLeaf = isLeaf;
         }
+
+        public int getDepth() {
+            if (isLeaf) {
+                return 1;
+            } 
+
+            int max = 0;
+            for(QuadtreeNode child : children) {
+                if (child != null) {
+                    max = Math.max(max, child.getDepth());
+                }
+            }
+
+            return 1 + max;
+        }
+
+        public long getNodeTotal() {
+            if (isLeaf) {
+                return 1;
+            }
+
+            int nodeCount = 0;
+            for(QuadtreeNode child : children) {
+                if (child != null) {
+                    nodeCount += child.getNodeTotal();
+                }
+            }
+
+            return nodeCount;
+        }
     }
     
     static int[] _size = {0, 0};
@@ -62,6 +92,8 @@ public class Quadtree {
         float compressPercentage = (1 - (float) sizeCompressed / sizeOriginal)*100;
         System.out.println("Persentase kompresi : " + compressPercentage + " %");
         System.out.println("Waktu eksekusi: " + durasi + " ms");
+        System.out.println("Kedalaman simpul dalam implementasi : " + tree.getDepth() + " simpul");
+        System.out.println("Banyak simpul dalam implementasi : " + tree.getNodeTotal() + " simpul");
     }
 
     public static void init() { //Initialisasi input
