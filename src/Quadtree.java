@@ -1,6 +1,5 @@
 import javax.imageio.ImageIO; //IO Gambar
 import java.awt.image.BufferedImage; //Manipulasi Gambar & Tipe Data BufferedImage
-import java.awt.image.DataBuffer;
 import java.io.File; //Manipulasi File
 import java.io.IOException; //Representasi File
 import java.awt.Color; //Tipe data warna
@@ -52,14 +51,16 @@ public class Quadtree {
         long selesai = System.currentTimeMillis();
         long durasi = selesai - mulai;
 
-        DataBuffer dataBuff1 = img.getData().getDataBuffer();
-       // DataBuffer dataBuff2 = img.getData().getDataBuffer();
+        File img_file_in = new File(absolute_address_in);
+        File img_file_out = new File(absolute_address_out);
 
-        long sizeByte_in = ((long) dataBuff1.getSize()) * 4l;
-        //long sizeByte_out = ((long) dataBuff2.getSize()) * 4l;
+        long sizeOriginal = img_file_in.length();
+        long sizeCompressed = img_file_out.length();
 
-        System.out.println("Ukuran gambar input : " + writeSize(sizeByte_in));
-        //System.out.println("Ukuran gambar output : " + writeSize(sizeByte_out)); Salah keknya
+        System.out.println("Ukuran gambar input : " + writeSize(sizeOriginal));
+        System.out.println("Ukuran gambar output : " + writeSize(sizeCompressed));
+        float compressPercentage = (1 - (float) sizeCompressed / sizeOriginal)*100;
+        System.out.println("Persentase kompresi : " + compressPercentage + " %");
         System.out.println("Waktu eksekusi: " + durasi + " ms");
     }
 
