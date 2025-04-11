@@ -54,4 +54,6 @@ Hasil kompilasi akan muncul di folder `bin`
   Cek lagi penulisan direktori input
 
 
-
+## Author
+- Dzubyan Ilman Ramadhan (10122010)
+- Muhammad Zakkiy (10122074)
