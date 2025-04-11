@@ -16,7 +16,6 @@ public class Quadtree {
     static int min_size = 0;
     static String absolute_address_out = "";
     static BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
-    //static BufferedImage img_out = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
     static int target = 0;
     //static String absolute_address_gif_out = "";
 
@@ -164,7 +163,6 @@ public class Quadtree {
         scanner.close();
         try {
             img = ImageIO.read(new File(absolute_address_in));
-            //img_out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
             System.out.println("Gambar berhasil dibaca!");
         } catch (IOException e) {
             System.out.println("Gagal membaca gambar: " + e.getMessage());
@@ -173,7 +171,6 @@ public class Quadtree {
 
     public static double error(int x, int y, int[] size) { //Perhitungan error
         if ("var".equals(error_method)) {
-            //System.out.println(123);
             double var_red = 0;
             double var_green = 0;
             double var_blue = 0;
@@ -190,10 +187,6 @@ public class Quadtree {
                 }
             }
             double area = size[0] * size[1];
-            //System.out.println(var_green);
-            //System.out.println(var_red);
-            //System.out.println(var_blue);
-            //System.out.println(area);
             var_red /= area;
             var_green /= area;
             var_blue /= area;
@@ -326,9 +319,7 @@ public class Quadtree {
 
     public static QuadtreeNode block_division(int x, int y, int[] size) { //Algoritma membagi gambar menjadi 4 & membuat tree
         double variance = error(x, y, size);
-        //System.out.println(variance);
         int area = size[0] * size[1];
-        //System.out.println(size[1]);
 
         if (variance > threshold && area > min_size && area / 4 >= min_size) {
             QuadtreeNode node = new QuadtreeNode(x, y, size, get_average_color(x, y, size), false);
@@ -353,8 +344,6 @@ public class Quadtree {
                 new_size_3[0] = size[0] / 2 + 1; new_size_3[1] = size[1] / 2;
                 new_size_4[0] = size[0] / 2 + 1; new_size_4[1] = size[1] / 2 + 1;
             }
-            //System.out.println(size[1]);
-            //System.out.println(new_size_2[1]);
             
             node.children[0] = block_division(x, y, new_size_1);
             node.children[1] = block_division(x, y + new_size_1[1], new_size_2);
@@ -363,10 +352,6 @@ public class Quadtree {
 
             return node;
         } else {
-            //Graphics2D g = img_out.createGraphics();
-            //g.setColor(get_average_color(x, y, size));
-            //g.fillRect(y, x, size[1], size[0]);
-            //g.dispose();
             return new QuadtreeNode(x, y, size, get_average_color(x, y, size), true);
         }
     }
@@ -400,11 +385,6 @@ public class Quadtree {
         long avg_red = sum_red / area;
         long avg_green = sum_green / area;
         long avg_blue = sum_blue / area;
-        //int avg_red = (int) avg_red;
-        //int avg_green = (int) avg_green;
-        //int avg_blue = (int) avg_blue;
-        //System.out.println(avg_green);
-        //System.out.println(avg_blue);
         Color avgColor = new Color((int) avg_red, (int) avg_green, (int) avg_blue);
         return avgColor;
     }
