@@ -16,7 +16,7 @@ public class Quadtree {
     static int min_size = 0;
     static String absolute_address_out = "";
     static BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
-    static BufferedImage img_out = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+    //static BufferedImage img_out = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
     static int target = 0;
     //static String absolute_address_gif_out = "";
 
@@ -64,6 +64,49 @@ public class Quadtree {
 
             return nodeCount;
         }
+
+        public void drawImageByDepth(Graphics2D g, int targetDepth) {
+            int[] size = {img.getHeight(), img.getWidth()};
+            drawByDepthHelper(g, 0, 0, size, 0, targetDepth);
+        }
+
+        private void drawByDepthHelper(Graphics2D g, int x, int y, int[] size, int currentDepth, int targetDepth) {
+            if (currentDepth == targetDepth || (children[0] == null)) {
+                Color avg = get_average_color(x, y, size);
+                g.setColor(avg);
+                g.fillRect(y, x, size[1], size[0]);
+                return;
+            }
+
+            if (children[0] != null) {
+                int[] new_size_1 = {size[0] / 2, size[1] / 2};
+                int[] new_size_2 = {size[0] / 2, size[1] / 2};
+                int[] new_size_3 = {size[0] / 2, size[1] / 2};
+                int[] new_size_4 = {size[0] / 2, size[1] / 2};
+
+                if (size[0] % 2 != 0 && size[1] % 2 == 0) {
+                    new_size_1[0] = size[0] / 2; new_size_1[1] = size[1] / 2;
+                    new_size_2[0] = size[0] / 2; new_size_2[1] = size[1] / 2;
+                    new_size_3[0] = size[0] / 2 + 1; new_size_3[1] = size[1] / 2;
+                    new_size_4[0] = size[0] / 2 + 1; new_size_4[1] = size[1] / 2;
+                } else if (size[0] % 2 == 0 && size[1] % 2 != 0) {
+                    new_size_1[0] = size[0] / 2; new_size_1[1] = size[1] / 2;
+                    new_size_2[0] = size[0] / 2; new_size_2[1] = size[1] / 2 + 1;
+                    new_size_3[0] = size[0] / 2; new_size_3[1] = size[1] / 2;
+                    new_size_4[0] = size[0] / 2; new_size_4[1] = size[1] / 2 + 1;
+                } else if (size[0] % 2 != 0 && size[1] % 2 != 0) {
+                    new_size_1[0] = size[0] / 2; new_size_1[1] = size[1] / 2;
+                    new_size_2[0] = size[0] / 2; new_size_2[1] = size[1] / 2 + 1;
+                    new_size_3[0] = size[0] / 2 + 1; new_size_3[1] = size[1] / 2;
+                    new_size_4[0] = size[0] / 2 + 1; new_size_4[1] = size[1] / 2 + 1;
+                }
+
+                children[0].drawByDepthHelper(g, x, y, new_size_1, currentDepth + 1, targetDepth);
+                children[1].drawByDepthHelper(g, x, y + new_size_1[1], new_size_2, currentDepth + 1, targetDepth);
+                children[2].drawByDepthHelper(g, x + new_size_1[0], y, new_size_3, currentDepth + 1, targetDepth);
+                children[3].drawByDepthHelper(g, x + new_size_1[0], y + new_size_1[1], new_size_4, currentDepth + 1, targetDepth);
+            }
+        }
     }
     
     static int[] _size = {0, 0};
@@ -76,7 +119,8 @@ public class Quadtree {
         init();
         int[] size = {img.getHeight(), img.getWidth()};
         tree = block_division(0, 0, size);
-        save_and_out();
+        BufferedImage img_out = make_images(tree.getDepth() - 1);
+        save_and_out(img_out);
 
         long selesai = System.currentTimeMillis();
         long durasi = selesai - mulai;
@@ -120,7 +164,7 @@ public class Quadtree {
         scanner.close();
         try {
             img = ImageIO.read(new File(absolute_address_in));
-            img_out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
+            //img_out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
             System.out.println("Gambar berhasil dibaca!");
         } catch (IOException e) {
             System.out.println("Gagal membaca gambar: " + e.getMessage());
@@ -319,15 +363,15 @@ public class Quadtree {
 
             return node;
         } else {
-            Graphics2D g = img_out.createGraphics();
-            g.setColor(get_average_color(x, y, size));
-            g.fillRect(y, x, size[1], size[0]);
-            g.dispose();
+            //Graphics2D g = img_out.createGraphics();
+            //g.setColor(get_average_color(x, y, size));
+            //g.fillRect(y, x, size[1], size[0]);
+            //g.dispose();
             return new QuadtreeNode(x, y, size, get_average_color(x, y, size), true);
         }
     }
 
-    public static void save_and_out() { //Meyimpan hasil gambar
+    public static void save_and_out(BufferedImage img_out) { //Meyimpan hasil gambar
         try {
             File output = new File(absolute_address_out);
             ImageIO.write(img_out, "jpg", output);
@@ -376,5 +420,15 @@ public class Quadtree {
             String out = String.format("%.2f", size_d) + " MB";
             return out;
         }
+    }
+
+    public static BufferedImage make_images(int depth) {
+
+        BufferedImage image = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = image.createGraphics();
+        tree.drawImageByDepth(g, depth);
+        g.dispose();
+
+        return image;
     }
 }
